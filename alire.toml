@@ -1,0 +1,39 @@
+name = "xtensa_dynconfig"
+description = "Configuration plugin generator for the GNU xtensa toolchain"
+version = "0.1.0-dev"
+
+authors = ["Max Filippov"]
+maintainers = ["Max Reznik <reznikmm@gmail.com>"]
+maintainers-logins = ["reznikmm"]
+licenses = "GPL-3.0-or-later WITH GCC-exception-3.1"
+website = "https://github.com/reznikmm/xtensa-dynconfig"
+tags = ["esp32", "esp32s2", "esp32s3", "esp8266", "xtensa"]
+
+auto-gpr-with = false
+project-files = ["gnat/xtensa_dynconfig.gpr"]
+
+[available.'case(os)']
+linux = true
+'...' = false
+
+[environment]
+XTENSA_GNU_CONFIG.set = "${CRATE_ROOT}/lib/libxtensa.so"
+
+[configuration]
+output_dir = "gnat"
+generate_ada = false
+generate_c = false
+
+[configuration.variables]
+cpu = { type = "Enum", values = ["esp32", "esp32s2", "esp32s3", "esp8266"] }
+
+[[depends-on]]
+gnat_native = "*"
+
+[[actions]]
+type = "post-fetch"
+command = ["bash", "-c", "[ -d config ] || git clone https://github.com/espressif/xtensa-overlays config"]
+
+[[actions]]
+type = "post-fetch"
+command = ["bash", "-c", "[ -f xtensa-config0.c ] || mv -v xtensa-config.c xtensa-config0.c"]

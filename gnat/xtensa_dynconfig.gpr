@@ -1,0 +1,27 @@
+with "xtensa_dynconfig_config.gpr";
+
+project Xtensa_Dynconfig is
+
+   for Languages use ("C");
+   for Library_Name use "xtensa";
+
+   CPU := Xtensa_Dynconfig_Config.CPU;
+
+   for Source_Dirs use
+     ("..",
+      Project'Project_Dir & "../config/xtensa_" & CPU & "/binutils/bfd",
+      Project'Project_Dir & "../config/xtensa_" & CPU & "/gdb/gdb/");
+
+   for Object_Dir use "../obj";
+   for Create_Missing_Dirs use "True";
+   for Library_Dir use "../lib";
+   for Library_Kind use "relocatable";
+
+   package Compiler is
+      for Default_Switches ("C") use
+         ("-I" & Project'Project_Dir & "../include",
+          "-I" & Project'Project_Dir & "../config/xtensa_" & CPU & "/binutils/include",
+          "-O2");
+   end Compiler;
+
+end Xtensa_Dynconfig;
