@@ -12,6 +12,8 @@ tags = ["esp32", "esp32s2", "esp32s3", "esp8266", "xtensa"]
 auto-gpr-with = false
 project-files = ["gnat/xtensa_dynconfig.gpr"]
 
+executables = ["lib/libxtensa.so"]
+
 [available.'case(os)']
 linux = true
 '...' = false
