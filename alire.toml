@@ -14,10 +14,18 @@ project-files = ["gnat/xtensa_dynconfig.gpr"]
 
 [available.'case(os)']
 linux = true
+macos = true
+windows = true
 '...' = false
 
-[environment]
-XTENSA_GNU_CONFIG.set = "${CRATE_ROOT}/lib/libxtensa.so"
+[environment.'case(os)'.linux]
+XTENSA_GNU_CONFIG.set = "${CRATE_ROOT}/lib/libxtensa.so" 
+
+[environment.'case(os)'.macos]
+XTENSA_GNU_CONFIG.set = "${CRATE_ROOT}/lib/libxtensa.dylib" 
+
+[environment.'case(os)'.windows]
+XTENSA_GNU_CONFIG.set = "${CRATE_ROOT}/lib/libxtensa.dll" 
 
 [configuration]
 output_dir = "gnat"
@@ -26,6 +34,9 @@ generate_c = false
 
 [configuration.variables]
 cpu = { type = "Enum", values = ["esp32", "esp32s2", "esp32s3", "esp8266"] }
+
+[configuration.values]
+xtensa_dynconfig.cpu = "esp32s3"
 
 [[depends-on]]
 gnat_native = "*"
